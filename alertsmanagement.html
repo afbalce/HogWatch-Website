@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HogWatch - Alert Management</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="sidebar.css"> <!-- Your custom sidebar CSS -->
+  <link rel="stylesheet" href="alertsmanagement.css">
+  <link rel="stylesheet" href="hogwatch-ui.css">
+  <link rel="stylesheet" href="page-transitions.css">
+</head>
+<body data-page="alerts">
+
+  <div class="app-layout">
+    
+    <!-- Reusable Sidebar Injected Here -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Page Header -->
+      <header class="page-header">
+        <div class="header-titles">
+          <h1>Alert management</h1>
+          <p>Piggery A · 6 pens monitored · 3 active environmental alerts</p>
+        </div>
+      </header>
+
+      <!-- KPI Cards (Top Row) -->
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">Active alerts</span>
+          <div class="kpi-value text-crit">3</div>
+          <span class="kpi-subtext">1 critical · 2 warning</span>
+        </div>
+        
+        <div class="kpi-card">
+          <span class="kpi-label">Pens impacted</span>
+          <div class="kpi-value">3</div>
+          <span class="kpi-subtext">Pens 2, 4, 6</span>
+        </div>
+        
+        <div class="kpi-card">
+          <span class="kpi-label">Pending action</span>
+          <div class="kpi-value">4</div>
+          <span class="kpi-subtext">3 alerts + 1 device status</span>
+        </div>
+        
+        <div class="kpi-card">
+          <span class="kpi-label">Resolved today</span>
+          <div class="kpi-value text-green">0</div>
+          <span class="kpi-subtext">No recent resolutions</span>
+        </div>
+      </section>
+
+      <!-- Filter Bar & Actions -->
+      <div class="filters-container">
+        <input class="list-search" id="list-search" type="search" placeholder="Search alerts, pens or devices" aria-label="Search alerts, pens or devices">
+        <div class="filter-pills">
+          <button class="filter-pill active" data-filter="all">All alerts</button>
+          <button class="filter-pill" data-filter="critical">Critical</button>
+          <button class="filter-pill" data-filter="warning">Warning</button>
+          <button class="filter-pill" data-filter="device">Device status</button>
+        </div>
+        <button class="btn-secondary" id="ackAllBtn">Acknowledge all</button>
+      </div>
+
+      <!-- Alerts Data Table -->
+      <div class="table-card">
+        <table class="alerts-table">
+          <thead>
+            <tr>
+              <th>Message</th>
+              <th>Pen</th>
+              <th>Device</th>
+              <th>Time</th>
+              <th>Severity</th>
+              <th>Status</th>
+              <th class="actions-col" scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="alertsTableBody">
+            
+            <!-- Row 1: Critical -->
+            <tr class="alert-row" data-category="critical">
+              <td>
+                <div class="alert-msg-title">Pen 4 ammonia above 25 ppm</div>
+                <div class="alert-msg-sub">Current 27 ppm · threshold 25 ppm</div>
+              </td>
+              <td>Pen 4</td>
+              <td>S-09</td>
+              <td>12 min ago</td>
+              <td><span class="badge badge-crit">Critical</span></td>
+              <td><span class="badge badge-open">Open</span></td>
+              <td class="actions-col">
+                <button type="button" class="alert-action ack-btn" aria-label="Acknowledge alert" title="Acknowledge alert">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button type="button" class="alert-action resolve-btn" aria-label="Resolve alert" title="Resolve alert">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.6 2.6L16 9"/></svg>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Row 2: Warning -->
+            <tr class="alert-row" data-category="warning">
+              <td>
+                <div class="alert-msg-title">Pen 2 temperature rising</div>
+                <div class="alert-msg-sub">Current 29.1 °C · target 22–28 °C</div>
+              </td>
+              <td>Pen 2</td>
+              <td>S-03</td>
+              <td>38 min ago</td>
+              <td><span class="badge badge-warn">Warning</span></td>
+              <td><span class="badge badge-open">Open</span></td>
+              <td class="actions-col">
+                <button type="button" class="alert-action ack-btn" aria-label="Acknowledge alert" title="Acknowledge alert">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button type="button" class="alert-action resolve-btn" aria-label="Resolve alert" title="Resolve alert">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.6 2.6L16 9"/></svg>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Row 3: Warning / Device -->
+            <tr class="alert-row" data-category="warning">
+              <td>
+                <div class="alert-msg-title">Sensor S-09 battery low</div>
+                <div class="alert-msg-sub">Current 14% · threshold 15%</div>
+              </td>
+              <td>Pen 4</td>
+              <td>S-09</td>
+              <td>1 h ago</td>
+              <td><span class="badge badge-warn">Warning</span></td>
+              <td><span class="badge badge-open">Open</span></td>
+              <td class="actions-col">
+                <button type="button" class="alert-action ack-btn" aria-label="Acknowledge alert" title="Acknowledge alert">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button type="button" class="alert-action resolve-btn" aria-label="Resolve alert" title="Resolve alert">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.6 2.6L16 9"/></svg>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Row 4: Device Offline -->
+            <tr class="alert-row" data-category="device">
+              <td>
+                <div class="alert-msg-title">Pen 6 sensor offline</div>
+                <div class="alert-msg-sub">No readings for 2 hours</div>
+              </td>
+              <td>Pen 6</td>
+              <td>S-11</td>
+              <td>2 h ago</td>
+              <td><span class="badge badge-offline">Offline</span></td>
+              <td><span class="badge badge-device">Device status</span></td>
+              <td class="actions-col">
+                <button type="button" class="alert-action ack-btn" aria-label="Acknowledge alert" title="Acknowledge alert">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button type="button" class="alert-action resolve-btn" aria-label="Resolve alert" title="Resolve alert">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.6 2.6L16 9"/></svg>
+                </button>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+        <p class="no-results" hidden role="status">No alerts match your search and filters.</p>
+      </div>
+
+    </main>
+  </div>
+      
+  <!-- Action Modal (Hidden by default) -->
+  <div id="actionModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Resolve Alert</h3>
+        <button class="close-modal-btn" id="closeModalX"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      
+      <div class="modal-body">
+        <p class="modal-subtitle">You are taking action on:</p>
+        <p id="modalAlertName" class="modal-alert-name">Pen 4 ammonia above 25 ppm</p>
+        
+        <!-- Pre-resolution Checklist -->
+        <div class="form-group checklist-group">
+          <label>Pre-resolution Checklist</label>
+          <label class="checkbox-container">
+            <input type="checkbox" class="resolve-check">
+            <span class="checkmark"></span> Environment physically inspected
+          </label>
+          <label class="checkbox-container">
+            <input type="checkbox" class="resolve-check">
+            <span class="checkmark"></span> Hardware/sensors functioning normally
+          </label>
+          <label class="checkbox-container">
+            <input type="checkbox" class="resolve-check">
+            <span class="checkmark"></span> Readings are stabilizing
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label for="actionSelect">Action taken</label>
+          <select id="actionSelect" class="form-input">
+            <option value="" disabled selected>-- Select response --</option>
+            <option value="ventilated">Increased ventilation</option>
+            <option value="sprinklers">Activated sprinklers</option>
+            <option value="fixed">Hardware fixed/replaced</option>
+            <option value="recalibrated">Sensor recalibrated</option>
+            <option value="false_alarm">False alarm (Ignored)</option>
+            <option value="other">Other (See notes)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="actionNotes">Incident report / Notes (optional)</label>
+          <textarea id="actionNotes" class="form-input" rows="3" placeholder="Add details about what was done..."></textarea>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn-outline" id="cancelModalBtn">Cancel</button>
+        <button class="btn-primary" id="confirmModalBtn" style="background: var(--primary-dark); color: white; border:none; padding: 8px 16px; border-radius: 8px; cursor:pointer;">Confirm</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Custom Alert Toast -->
+  <div id="customAlert" class="custom-alert">
+    <i id="alertIcon" class="fa-solid fa-circle-info"></i>
+    <span id="alertMessage" class="alert-text">Message goes here</span>
+  </div>
+
+  <script src="list-filter.js"></script>
+  <script src="alertsmanagement.js"></script>
+  <script src="sidebar.js"></script>
+</body>
+</html>

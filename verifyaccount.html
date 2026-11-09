@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HogWatch Verify Account</title>
+  
+  <!-- Inter Font & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="verifyaccount.css">
+  <link rel="stylesheet" href="hogwatch-ui.css">
+  <link rel="stylesheet" href="page-transitions.css">
+</head>
+<body>
+
+  <div class="verify-card">
+    <div class="header">
+      <h1>HogWatch</h1>
+      <p>Verify your account.</p>
+    </div>
+
+    <!-- Description text -->
+    <p class="description-text">
+      We sent a 6-digit verification code to your email/mobile. Please enter it below to confirm your account.
+    </p>
+
+    <form id="verifyForm">
+      <div class="otp-container">
+        <input type="text" maxlength="1" class="otp-input" pattern="[0-9]*" inputmode="numeric" required autofocus>
+        <input type="text" maxlength="1" class="otp-input" pattern="[0-9]*" inputmode="numeric" required>
+        <input type="text" maxlength="1" class="otp-input" pattern="[0-9]*" inputmode="numeric" required>
+        <input type="text" maxlength="1" class="otp-input" pattern="[0-9]*" inputmode="numeric" required>
+        <input type="text" maxlength="1" class="otp-input" pattern="[0-9]*" inputmode="numeric" required>
+        <input type="text" maxlength="1" class="otp-input" pattern="[0-9]*" inputmode="numeric" required>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        Verify Account <i class="fa-solid fa-check"></i>
+      </button>
+    </form>
+    
+    <div class="footer">
+      <p>Didn't receive the code? <a href="#" id="resendCodeBtn">Resend</a></p>
+      <div class="divider"></div>
+      <a href="loginUI.html" id="backToLoginBtn">
+        <i class="fa-solid fa-arrow-left"></i> Back to log in
+      </a>
+    </div>
+  </div>
+
+  <script src="verifyaccount.js"></script>
+</body>
+</html>

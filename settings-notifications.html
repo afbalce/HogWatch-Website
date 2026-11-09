@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HogWatch - Notification Settings</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="settings.css">
+  <link rel="stylesheet" href="hogwatch-ui.css">
+  <link rel="stylesheet" href="page-transitions.css">
+</head>
+<body data-page="settings">
+
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+      <header class="page-header">
+        <div class="header-titles">
+          <h1>Settings</h1>
+          <p>Preferences, notifications, account, and alert thresholds</p>
+        </div>
+      </header>
+
+      <!-- 5-Page Navigation -->
+      <div class="settings-tabs">
+        <a href="settings.html" class="tab-link">Account</a>
+        <a href="settings-security.html" class="tab-link">Security</a>
+        <a href="settings-alerts.html" class="tab-link">Alerts</a>
+        <a href="settings-cameras.html" class="tab-link">Cameras</a> <!-- Added link -->
+        <a href="settings-notifications.html" class="tab-link">Notifications</a>
+      </div>
+
+      <div class="settings-container">
+        <!-- Notifications Card -->
+        <div class="settings-card">
+          <h3>Notifications</h3>
+          <p class="card-subtitle">Manage how you receive system alerts.</p>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <strong>SMS alerts</strong>
+              <span>Critical alerts sent by text message</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" checked class="notif-toggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <strong>Email digest</strong>
+              <span>Daily summary of farm conditions</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" checked class="notif-toggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <strong>Offline device alerts</strong>
+              <span>When a sensor stops reporting</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" checked class="notif-toggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <strong>Low battery warnings</strong>
+              <span>When a sensor falls below 15%</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" class="notif-toggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+      
+  <div id="customAlert" class="custom-alert">
+    <i id="alertIcon" class="fa-solid fa-circle-info"></i>
+    <span id="alertMessage" class="alert-text">Message goes here</span>
+  </div>
+
+  <script src="settings.js"></script>
+  <script src="sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+.pen-link { color: var(--hw-accent); font-weight: 700; text-underline-offset: 3px; }
+.pen-id { display: block; margin-top: 3px; color: var(--hw-muted); }
+.status[data-state=OK] { color: #166534; background: #dcfce7; }
+.status[data-state=Warning] { color: #854d0e; background: #fef3c7; }
+.status[data-state=Critical] { color: #a53f37; background: #ffebe8; }
+.status[data-state=Offline] { color: #526479; background: #eef1ef; }
+#pen-dialog { margin: auto; padding: 24px; width: min(440px,94vw); max-height: 90dvh; overflow-y: auto; border: 1px solid #dbe4de; border-radius: 16px; color: #193529; }
+#pen-dialog::backdrop { background: rgb(18 37 28 / 45%); }
+.power-panel-header a { text-decoration: none; }
+.devices-table .action-buttons { justify-content: flex-end; gap: 6px; }
+#pen-dialog label, #pen-dialog p { font-size: 13px; }
+#pen-dialog h2 { margin: 0 0 18px; }
+#pen-number, #pen-name { display: block; width: 100%; margin: 6px 0 14px; padding: 10px; border: 1px solid #cad7ce; border-radius: 8px; }
+#pen-dialog fieldset { margin: 14px 0; padding: 8px 12px; border-radius: 10px; border: 1px solid #dae4dc; }
+#pen-dialog legend { font-size: 14px; font-weight: 650; }
+.device-choice { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
+.device-choice input { width: 17px; height: 17px; accent-color: #087755; }
+.device-choice small { display: block; color: #566b5f; margin-top: 2px; }
+#pen-dialog a { color: var(--hw-accent); font-size: 13px; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+#pen-form-note { color: #97413e; }

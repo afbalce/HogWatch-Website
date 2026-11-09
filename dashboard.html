@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HogWatch Dashboard</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="sidebar.css"> <!-- Your sidebar CSS -->
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="hogwatch-ui.css">
+  <link rel="stylesheet" href="page-transitions.css">
+</head>
+<body data-page="dashboard">
+
+  <div class="app-layout">
+    
+    <!-- Modernized Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Dashboard Content -->
+    <main class="main-content">
+      <div class="farm-dashboard">
+        <header class="farm-cover">
+          <div class="farm-name">Piggery A</div>
+          <h1>Farm overview</h1>
+          <div class="cover-footer"><span id="overview-status"></span><button type="button" id="refresh">Refresh</button></div>
+        </header>
+
+        <section class="overview-totals" aria-label="Farm summary">
+          <a class="total" href="pen-management.html"><span>Pens monitored</span><strong id="total-pens">—</strong><small id="online-count"></small></a>
+          <a class="total" href="#recent-alerts"><span>Active alerts</span><strong id="total-alerts">—</strong><small id="severity-count"></small></a>
+          <button class="total" type="button" data-show="0"><span>Avg temperature</span><strong id="average-temp">—</strong><small>Compare pens ↗</small></button>
+          <button class="total" type="button" data-show="2"><span>Avg ammonia</span><strong id="average-ammonia">—</strong><small>Compare pens ↗</small></button>
+        </section>
+
+        <div class="dashboard-grid">
+          <section class="dashboard-panel" aria-labelledby="compare-title">
+            <div class="panel-heading"><h2 id="compare-title">Compare pens</h2><a href="pen-monitoring.html">View all pens</a></div>
+            <div class="metric-switch" role="group" aria-label="Reading to compare">
+              <button type="button" data-metric="0" aria-pressed="true">Temperature</button>
+              <button type="button" data-metric="1" aria-pressed="false">Humidity</button>
+              <button type="button" data-metric="2" aria-pressed="false">Ammonia</button>
+            </div>
+            <div class="comparison-tools">
+              <input class="list-search" type="search" id="list-search" placeholder="Search pens" aria-label="Search pens">
+              <select id="list-category" aria-label="Filter pens by status"><option value="">All statuses</option><option>OK</option><option>Warning</option><option>Critical</option><option>Offline</option></select>
+            </div>
+            <div id="comparison" role="group" aria-label="Choose a pen to inspect"></div>
+            <div class="comparison-foot"><span id="comparison-count"></span><span id="metric-target"></span></div>
+          </section>
+          <section class="dashboard-panel detail-panel" aria-label="Selected pen">
+            <div class="panel-heading"><h2>Pen detail</h2><span class="status-label" id="detail-status"></span></div>
+            <div id="detail-content">
+              <h3 id="pen-title"></h3>
+              <dl id="pen-readings"></dl>
+              <p id="pen-note"></p>
+              <a class="monitor-link" id="open-pen">Open pen monitoring <span aria-hidden="true">→</span></a>
+            </div>
+            <p id="detail-empty" hidden>Select a matching pen to see its readings.</p>
+          </section>
+          <section class="dashboard-panel" id="recent-alerts">
+            <div class="panel-heading"><h2>Recent alerts</h2><a href="alertsmanagement.html">Manage alerts</a></div>
+            <div id="alert-list"></div>
+          </section>
+          <section class="dashboard-panel">
+            <div class="panel-heading"><h2>Edge gateway</h2><a href="devicemanagement.html">Devices</a></div>
+            <dl id="gateway-summary"><div><dt>Solar generation</dt><dd>15.4 W</dd></div><div><dt>Gateway battery</dt><dd>85%</dd></div><div><dt>Wi-Fi adapter</dt><dd id="wifi-status"></dd></div><div><dt>SMS modem</dt><dd id="sms-status"></dd></div></dl>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="device-inventory.js"></script>
+  <script src="dashaboard.js"></script>
+  <script src="sidebar.js"></script>
+</body>
+</html>

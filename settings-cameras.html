@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HogWatch - Camera Settings</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="settings.css">
+  <link rel="stylesheet" href="hogwatch-ui.css">
+  <link rel="stylesheet" href="page-transitions.css">
+</head>
+<body data-page="settings">
+
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+      <header class="page-header">
+        <div class="header-titles">
+          <h1>Settings</h1>
+          <p>Preferences, notifications, account, and alert thresholds</p>
+        </div>
+      </header>
+
+      <!-- 5-Page Navigation (Added Cameras) -->
+      <div class="settings-tabs">
+        <a href="settings.html" class="tab-link">Account</a>
+        <a href="settings-security.html" class="tab-link">Security</a>
+        <a href="settings-alerts.html" class="tab-link">Alerts</a>
+        <a href="settings-cameras.html" class="tab-link active">Cameras</a>
+        <a href="settings-notifications.html" class="tab-link">Notifications</a>
+      </div>
+
+      <div class="settings-container" style="max-width: 680px;">
+        <form id="cameraSettingsForm">
+
+          <!-- Storage & Quality Card -->
+          <div class="settings-card" style="margin-bottom: 24px;">
+            <h3>Storage & Quality</h3>
+            <p class="card-subtitle">Manage edge gateway video storage and stream resolution.</p>
+
+            <div style="margin-bottom: 24px; padding: 16px; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px;">
+              <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #374151;">
+                <span>Local Gateway Storage</span>
+                <span>320 GB / 500 GB (64%)</span>
+              </div>
+              <div style="width: 100%; height: 8px; background: #E5E7EB; border-radius: 4px; overflow: hidden;">
+                <div style="width: 64%; height: 100%; background: var(--primary-dark); border-radius: 4px;"></div>
+              </div>
+              <span class="input-hint" style="margin-top: 8px;">Oldest footage will be automatically overwritten when full.</span>
+            </div>
+
+            <div class="form-row-multi">
+              <div class="form-group" style="flex: 1;">
+                <label>Stream & Recording Quality</label>
+                <select class="form-input">
+                  <option value="720">720p (Data Saver)</option>
+                  <option value="1080" selected>1080p HD (Recommended)</option>
+                  <option value="4k">4K Ultra HD</option>
+                </select>
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label>Storage Retention Limit</label>
+                <select class="form-input">
+                  <option value="7">7 Days</option>
+                  <option value="14" selected>14 Days</option>
+                  <option value="30">30 Days</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recording Rules Card -->
+          <div class="settings-card">
+            <h3>Recording Rules</h3>
+            <p class="card-subtitle">Configure when and how cameras capture footage.</p>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <strong>Continuous 24/7 Recording</strong>
+                <span>Record all camera feeds constantly (requires high storage)</span>
+              </div>
+              <label class="toggle">
+                <input type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <strong>Event-Triggered Recording</strong>
+                <span>Only record when motion is detected or an alert fires</span>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div style="height: 1px; background: #E5E7EB; margin: 24px 0;"></div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>Routine Snapshots</label>
+              <select class="form-input">
+                <option value="0">Disabled</option>
+                <option value="15">Every 15 minutes</option>
+                <option value="30" selected>Every 30 minutes</option>
+                <option value="60">Every 1 hour</option>
+              </select>
+              <span class="input-hint">Takes a still image of all pens at regular intervals for the daily log.</span>
+            </div>
+          </div>
+
+          <div style="text-align: right; padding-top: 24px; padding-bottom: 40px;">
+            <button type="submit" class="btn-primary" style="font-size: 14.5px; padding: 12px 24px;">Save Camera Settings</button>
+          </div>
+
+        </form>
+      </div>
+    </main>
+  </div>
+      
+  <div id="customAlert" class="custom-alert">
+    <i id="alertIcon" class="fa-solid fa-circle-info"></i>
+    <span id="alertMessage" class="alert-text">Message goes here</span>
+  </div>
+
+  <script src="settings.js"></script>
+  <script src="sidebar.js"></script>
+</body>
+</html>

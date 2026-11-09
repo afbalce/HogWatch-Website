@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users - HogWatch</title>
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="users.css">
+    <link rel="stylesheet" href="hogwatch-ui.css">
+  <link rel="stylesheet" href="page-transitions.css">
+</head>
+<body data-page="users">
+    <div class="app-container">
+        <div id="sidebar-container"></div>
+
+        <main class="main-content">
+            <div class="content-max-width">
+                <header class="page-header">
+                    <div class="header-text">
+                        <a class="mobile-nav" href="sidebar.html?page=users">Navigation</a>
+                        <h1>Users</h1>
+                        <p>Manage your farm team and their access.</p>
+                    </div>
+                    <button class="btn-primary" id="btn-invite">
+                        <span aria-hidden="true">＋</span>
+                        Invite user
+                    </button>
+                </header>
+
+                <section class="team-summary" aria-label="Team overview">
+                    <div class="summary-card">
+                        <span class="summary-icon"><i class="fa-solid fa-user-group" aria-hidden="true"></i></span>
+                        <div><h2>Total users</h2><strong id="total-count">2</strong></div>
+                    </div>
+                    <div class="summary-card active-summary">
+                        <span class="summary-icon"><i class="fa-solid fa-user-check" aria-hidden="true"></i></span>
+                        <div><h2>Active users</h2><strong id="active-count">2</strong></div>
+                    </div>
+                    <div class="summary-card invited-summary">
+                        <span class="summary-icon"><i class="fa-regular fa-envelope" aria-hidden="true"></i></span>
+                        <div><h2>Pending invitations</h2><strong id="invited-count">0</strong></div>
+                    </div>
+                </section>
+
+                <section class="table-card" aria-labelledby="directory-title">
+                    <div class="table-toolbar">
+                        <h2 id="directory-title">User directory</h2>
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+                        <input type="search" id="search-input" aria-label="Search users by name, email or username" placeholder="Search users…">
+                    </div>
+                    <div class="filter-box">
+                        <select id="role-filter" aria-label="Filter by role">
+                            <option value="All">All roles</option>
+                            <option value="Owner">Owner</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Viewer">Viewer</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-scroll">
+                    <table class="users-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Platform</th>
+                                <th>Status</th>
+                                <th>Last active</th>
+                                <th class="col-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody">
+                            <!-- Row 1 -->
+                            <tr>
+                                <td>
+                                    <div class="member-profile">
+                                        <div class="avatar bg-green">MS</div>
+                                        <div class="user-details">
+                                            <span class="member-name">Maria Santos</span>
+                                            <span class="user-email">maria.s@example.com</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-subtle">maria</td>
+                                <td class="member-role">Owner</td>
+                                <td>
+                                    <div class="platform-tags">
+                                        <span class="tag web">Web</span>
+                                        <span class="tag mobile">Mobile</span>
+                                    </div>
+                                </td>
+                                <td><span class="status active">Active</span></td>
+                                <td class="text-subtle">Just now</td>
+                                <td class="col-actions">
+                                    <div class="action-buttons">
+                                        <button type="button" class="btn-icon edit" aria-label="Edit user" title="Edit user">
+                                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M13.5 6.5l4 4 M4 20l4.5-1 12-12a2.83 2.83 0 0 0-4-4l-12 12L4 20Z"/></svg>
+                                        </button>
+                                        <button type="button" class="btn-icon delete" aria-label="Remove user" title="Remove user">
+                                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 7h17 M9 7V4.5h6V7 M6 7l1 13h10l1-13 M10 10v7 M14 10v7"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Row 2 -->
+                            <tr>
+                                <td>
+                                    <div class="member-profile">
+                                        <div class="avatar bg-purple">JR</div>
+                                        <div class="user-details">
+                                            <span class="member-name">Jun Reyes</span>
+                                            <span class="user-email">jun.reyes@example.com</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-subtle">jun.r</td>
+                                <td class="member-role">Manager</td>
+                                <td>
+                                    <div class="platform-tags">
+                                        <span class="tag web">Web</span>
+                                    </div>
+                                </td>
+                                <td><span class="status active">Active</span></td>
+                                <td class="text-subtle">2 h ago</td>
+                                <td class="col-actions">
+                                    <div class="action-buttons">
+                                        <button type="button" class="btn-icon edit" aria-label="Edit user" title="Edit user">
+                                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M13.5 6.5l4 4 M4 20l4.5-1 12-12a2.83 2.83 0 0 0-4-4l-12 12L4 20Z"/></svg>
+                                        </button>
+                                        <button type="button" class="btn-icon delete" aria-label="Remove user" title="Remove user">
+                                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 7h17 M9 7V4.5h6V7 M6 7l1 13h10l1-13 M10 10v7 M14 10v7"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                    
+                    <div id="empty-state" class="empty-state hidden">
+                        <i class="fa-solid fa-users-slash" aria-hidden="true"></i>
+                        <p>No users match your search or role filter.</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <dialog class="user-dialog" id="add-user-modal" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Add New User</h2>
+                <button class="btn-close" id="btn-close-modal" aria-label="Close dialog"><span aria-hidden="true">×</span></button>
+            </div>
+            <form id="add-user-form">
+                <div class="form-group">
+                    <label for="input-name">Full name</label>
+                    <input type="text" id="input-name" required placeholder="e.g. Ana Cruz">
+                </div>
+                <div class="form-group">
+                    <label for="input-username">Username</label>
+                    <input type="text" id="input-username" required placeholder="e.g. anac">
+                </div>
+                <div class="form-group">
+                    <label for="input-role">Role</label>
+                    <div class="select-wrapper">
+                        <select id="input-role">
+                            <option value="Viewer">Viewer</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Owner">Owner</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Platform Access</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="check-web" value="Web" checked>
+                            <span class="custom-checkbox"></span> Website
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="check-mobile" value="Mobile">
+                            <span class="custom-checkbox"></span> Mobile App
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="btn-cancel-modal">Cancel</button>
+                    <button type="submit" class="btn-primary">Save user</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <script src="sidebar.js"></script>
+    <script src="users.js"></script>
+</body>
+</html>

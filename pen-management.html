@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pen Management - HogWatch</title>
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="devicemanagement.css">
+    <link rel="stylesheet" href="hogwatch-ui.css">
+    <link rel="stylesheet" href="pen-management.css">
+  <link rel="stylesheet" href="page-transitions.css">
+</head>
+<body data-page="pen-management">
+    <div class="app-layout">
+        <div id="sidebar-container"></div>
+
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Pen management</h1>
+                <p>Piggery A · Manage pens and their assigned sensors and cameras</p>
+            </header>
+            <section class="gateway-power-panel" aria-labelledby="overview-title">
+                <div class="power-panel-header">
+                    <div class="power-title-group"><h2 id="overview-title"><i class="fa-solid fa-border-all" aria-hidden="true"></i> Pen overview</h2></div>
+                    <a class="btn-outline" href="devicemanagement.html">Manage devices</a>
+                </div>
+                <div class="power-metrics-grid">
+                    <div class="power-metric"><span class="metric-label">Total pens</span><strong class="metric-value" id="total-count">—</strong></div>
+                    <div class="power-metric"><span class="metric-label">Pens with sensors</span><strong class="metric-value" id="active-count">—</strong></div>
+                    <div class="power-metric"><span class="metric-label">Pens with cameras</span><strong class="metric-value" id="invited-count">—</strong></div>
+                    <div class="power-metric"><span class="metric-label">Unassigned sensors</span><strong class="metric-value" id="free-count">—</strong></div>
+                </div>
+            </section>
+            <div class="filters-container">
+                <input type="search" class="list-search" id="search-input" aria-label="Search pens or devices" placeholder="Search pens or devices">
+                <div class="filter-pills" aria-label="Filter pens by status">
+                    <button class="filter-pill active" data-status="" aria-pressed="true">All pens</button>
+                    <button class="filter-pill" data-status="OK" aria-pressed="false">OK</button>
+                    <button class="filter-pill" data-status="Warning" aria-pressed="false">Warning</button>
+                    <button class="filter-pill" data-status="Critical" aria-pressed="false">Critical</button>
+                    <button class="filter-pill" data-status="Offline" aria-pressed="false">Offline</button>
+                </div>
+                <button class="btn-primary" id="add-pen"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add pen</button>
+            </div>
+            <section class="table-card" aria-label="Pen directory">
+                <table class="devices-table"><thead><tr><th>Pen</th><th>Sensors</th><th>Cameras</th><th>Status</th><th class="actions-col">Actions</th></tr></thead>
+                    <tbody id="pen-rows"></tbody>
+                </table>
+                <p id="empty" class="no-results" hidden></p>
+            </section>
+            <template id="pen-row"><tr><td><a class="pen-link"></a><small class="pen-id"></small></td><td></td><td></td><td><span class="status badge"></span></td><td><div class="action-buttons">
+                                        <button type="button" class="btn-icon edit edit-btn" aria-label="Edit pen" title="Edit pen">
+                                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M13.5 6.5l4 4 M4 20l4.5-1 12-12a2.83 2.83 0 0 0-4-4l-12 12L4 20Z"/></svg>
+                                        </button>
+                                        <button type="button" class="btn-icon delete delete-btn" aria-label="Remove pen" title="Remove pen">
+                                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 7h17 M9 7V4.5h6V7 M6 7l1 13h10l1-13 M10 10v7 M14 10v7"/></svg>
+                                        </button>
+                                    </div></td></tr></template>
+      <dialog id="pen-dialog" class="pen-dialog" aria-labelledby="dialog-title">
+        <form id="pen-form"><h2 id="dialog-title">Add pen</h2>
+          <label for="pen-number">Pen number</label><input id="pen-number" type="number" min="1" max="9999" required>
+          <label for="pen-name">Display name (optional)</label><input id="pen-name" maxlength="64" placeholder="e.g. Nursery">
+          <fieldset><legend>Sensors</legend><div id="sensor-choices"></div></fieldset>
+          <fieldset><legend>Cameras</legend><div id="camera-choices"></div></fieldset>
+          <a href="devicemanagement.html">Manage devices</a>
+          <p id="pen-form-note" role="status"></p>
+          <div class="dialog-actions"><button type="button" class="btn-secondary" id="cancel">Cancel</button><button class="btn-primary" type="submit">Save pen</button></div>
+        </form>
+      </dialog>
+        </main>
+    </div>
+    <script src="device-inventory.js"></script>
+    <script src="sidebar.js"></script>
+    <script src="pen-management.js"></script>
+</body>
+</html>

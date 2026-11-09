@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HogWatch - Device Management</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="devicemanagement.css">
+  <link rel="stylesheet" href="hogwatch-ui.css">
+  <link rel="stylesheet" href="page-transitions.css">
+</head>
+<body data-page="devices">
+
+  <div class="app-layout">
+    
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      
+      <header class="page-header">
+        <div class="header-titles">
+          <h1>Device management</h1>
+          <p>Piggery A · Manage sensors, cameras, and gateways</p>
+        </div>
+      </header>
+
+      <!-- NEW: Gateway Power Panel -->
+      <section class="gateway-power-panel">
+        <div class="power-panel-header">
+          <div class="power-title-group">
+            <h2><i class="fa-solid fa-server"></i> Main Edge Gateway</h2>
+            <span class="badge badge-ok">System Stable</span>
+          </div>
+          <button class="btn-outline btn-small" id="refresh-power"><i class="fa-solid fa-rotate"></i> Refresh Data</button>
+        </div>
+        
+        <div class="power-metrics-grid">
+          <div class="power-metric">
+            <span class="metric-label">Solar Generation</span>
+            <div class="metric-value text-green"><i class="fa-solid fa-sun"></i> <span id="solar-watts" data-watts="15.4">+ 15.4 W</span></div>
+            <span class="metric-sub">Peak sunlight</span>
+          </div>
+          <div class="power-metric">
+            <span class="metric-label">Total Device Load</span>
+            <div class="metric-value text-crit"><i class="fa-solid fa-bolt"></i> <span id="device-load">—</span></div>
+            <span class="metric-sub" id="load-note">Estimated from configured wattages</span>
+          </div>
+          <div class="power-metric">
+            <span class="metric-label">Net Power</span>
+            <div class="metric-value" id="net-watts">—</div>
+            <span class="metric-sub" id="net-note">Generation minus device load</span>
+          </div>
+          <div class="power-metric">
+            <span class="metric-label">Gateway Battery</span>
+            <div class="metric-value">85%</div>
+            <span class="metric-sub">Est. 48h runtime without sun</span>
+          </div>
+        </div>
+        <div class="gateway-links" aria-label="Gateway communications">
+          <article class="gateway-link" data-module="wifi">
+            <div class="gateway-link-heading"><h3><i class="fa-solid fa-wifi" aria-hidden="true"></i> Wi-Fi adapter</h3><span class="badge badge-offline">Not configured</span></div>
+            <p class="module-detail">Network name (SSID) not set</p>
+            <button type="button" class="btn-outline" aria-label="Configure Wi-Fi adapter">Configure Wi-Fi</button>
+          </article>
+          <article class="gateway-link" data-module="sms">
+            <div class="gateway-link-heading"><h3><i class="fa-solid fa-sim-card" aria-hidden="true"></i> SMS modem</h3><span class="badge badge-offline">Not configured</span></div>
+            <p class="module-detail">Mobile carrier not set</p>
+            <div class="gateway-link-actions"><button type="button" class="btn-outline" aria-label="Configure SMS modem">Configure SMS</button>
+              <a href="settings-notifications.html">SMS alert settings</a></div>
+          </article>
+        </div>
+      </section>
+
+      <dialog id="gateway-dialog" class="assignment-dialog" aria-labelledby="gateway-dialog-title">
+        <form id="gateway-form">
+          <div class="modal-header"><h3 id="gateway-dialog-title">Gateway configuration</h3></div>
+          <div class="modal-body device-fields">
+            <div class="form-group"><label for="gateway-device">Device name</label><input id="gateway-device" class="form-input" maxlength="80" required></div>
+            <div class="form-group"><label id="gateway-network-label" for="gateway-network">Network name (SSID)</label><input id="gateway-network" class="form-input" required></div>
+            <label class="gateway-enable"><input id="gateway-enabled" type="checkbox"> Enable this gateway module</label>
+            <p id="gateway-error" role="status"></p>
+          </div>
+          <div class="modal-footer"><button type="button" id="gateway-cancel" class="btn-outline">Cancel</button><button type="submit" class="btn-primary">Save configuration</button></div>
+        </form>
+      </dialog>
+
+      <section class="climate-panel" aria-labelledby="climate-title">
+        <header class="climate-head"><div><h2 id="climate-title">Environmental controls</h2><p>Local simulation · water estimates use the configured flow rate.</p></div>
+          <button type="button" class="btn-secondary" id="add-controller">Add controller</button></header>
+        <div id="controller-list"></div>
+        <p id="climate-message" role="status"></p>
+      </section>
+
+      <!-- Filters & Add Buttons -->
+      <div class="filters-container">
+        <input class="list-search" id="list-search" type="search" placeholder="Search devices, IDs or pens" aria-label="Search devices, IDs or pens">
+        <div class="filter-pills">
+          <button class="filter-pill active" data-filter="all">All devices</button>
+          <button class="filter-pill" data-filter="sensor">Sensors</button>
+          <button class="filter-pill" data-filter="camera">Cameras</button>
+        </div>
+        <div class="action-buttons">
+          <button class="btn-secondary" id="assign-sensors">Assign sensors</button>
+          <button class="btn-secondary" id="openAddCameraBtn"><i class="fa-solid fa-video"></i> Add Camera</button>
+          <button class="btn-primary" id="openAddSensorBtn"><i class="fa-solid fa-plus"></i> Add Sensor</button>
+        </div>
+      </div>
+
+      <!-- Device Table -->
+      <div class="table-card">
+        <table class="devices-table">
+          <thead>
+            <tr>
+              <th>Device Name</th>
+              <th>Type</th>
+              <th>Location</th>
+              <th>Power draw</th>
+              <th>Signal</th>
+              <th>Status</th>
+              <th class="actions-col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="devicesTableBody"></tbody>
+        </table>
+        <template id="device-row"><tr class="device-row"><td><div class="device-name"></div><div class="device-id"></div></td><td></td><td></td><td></td><td></td><td><span class="badge"></span></td><td class="actions-col">
+                <button type="button" class="btn-icon edit-btn" aria-label="Edit device" title="Edit device">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M13.5 6.5l4 4 M4 20l4.5-1 12-12a2.83 2.83 0 0 0-4-4l-12 12L4 20Z"/></svg>
+                </button>
+                <button type="button" class="btn-icon delete-btn" aria-label="Remove device" title="Remove device">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 7h17 M9 7V4.5h6V7 M6 7l1 13h10l1-13 M10 10v7 M14 10v7"/></svg>
+                </button>
+              </td></tr></template>
+        <p class="no-results" hidden role="status">No devices match your search and filters.</p>
+      </div>
+
+    </main>
+  </div>
+      
+  <!-- ================= MODALS ================= -->
+
+  <dialog id="assignment-dialog" class="assignment-dialog" aria-labelledby="assignment-title">
+    <form id="assignment-form">
+      <div class="modal-header"><h3 id="assignment-title">Assign sensors</h3></div>
+      <div class="modal-body">
+        <label for="destination-pen">Destination pen</label><select class="form-input" id="destination-pen"></select>
+        <fieldset><legend>Sensors to move</legend>
+          <p>Choose one sensor or move several to the same pen.</p>
+          <div id="assignment-list"></div>
+        </fieldset>
+        <p id="assignment-error" role="status"></p>
+      </div>
+      <div class="modal-footer"><button type="button" id="cancel-assignment" class="btn-outline">Cancel</button>
+        <button type="submit" class="btn-primary">Save assignments</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="controller-dialog" class="assignment-dialog" aria-labelledby="controller-title">
+    <form id="controller-form">
+      <div class="modal-header"><h3 id="controller-title">Add controller</h3></div>
+      <div class="modal-body device-fields">
+        <div class="form-group"><label for="controller-type">Controller type</label><select class="form-input" id="controller-type"><option value="fan">Ventilation fan</option><option value="sprinkler">Sprinkler</option></select></div>
+        <div class="form-group"><label for="controller-name">Device name</label><input class="form-input" id="controller-name" required maxlength="80"></div>
+        <div class="form-group"><label for="controller-pen">Assigned pen</label><select class="form-input" id="controller-pen"></select></div>
+        <div class="form-group"><label for="controller-watts">Power draw while running (W)</label><input class="form-input" id="controller-watts" type="number" min="0" step="any" placeholder="Enter wattage"></div>
+        <fieldset class="device-fields tank-fields" id="tank-fields"><legend>Water settings</legend>
+          <div class="form-group"><label for="tank-capacity">Tank capacity (L)</label><input class="form-input" id="tank-capacity" type="number" min="0.01" step="any" required></div>
+          <div class="form-group"><label for="tank-water">Water remaining (L)</label><input class="form-input" id="tank-water" type="number" min="0" step="any" required></div>
+          <div class="form-group"><label for="tank-flow">Flow rate (L/min)</label><input class="form-input" id="tank-flow" type="number" min="0.01" step="any" required></div>
+        </fieldset>
+        <p id="controller-error" role="status"></p>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn-outline" id="cancel-controller">Cancel</button><button class="btn-primary" type="submit">Save controller</button></div>
+    </form>
+  </dialog>
+  <!-- 1. ADD SENSOR MODAL -->
+  <div id="addSensorModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Add New Sensor</h3>
+        <button type="button" class="close-modal-btn" aria-label="Close dialog">×</button>
+      </div>
+      <form id="addSensorForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="sensor-kind">Sensor type</label>
+            <select class="form-input" id="sensor-kind" required></select>
+          </div>
+          <div class="form-group">
+            <label>Device Name</label>
+            <input type="text" class="form-input" placeholder="e.g. S-10 Env Sensor" required>
+          </div>
+          <div class="form-group">
+            <label>Device ID / MAC Address</label>
+            <input type="text" class="form-input" placeholder="e.g. HW-SENS-010" required>
+          </div>
+          <div class="form-group"><label for="add-Sensor-watts">Power draw (W)</label><input class="form-input" id="add-Sensor-watts" type="number" min="0" step="any" placeholder="Enter wattage"></div>
+          <div class="form-group">
+            <label>Assign to Location</label>
+            <select class="form-input" required>
+              <option value="unassigned" selected>Unassigned</option>
+              <option value="pen1">Pen 1</option>
+              <option value="pen2">Pen 2</option>
+              <option value="pen3">Pen 3</option>
+              <option value="pen4">Pen 4</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-outline cancel-modal-btn">Cancel</button>
+          <button type="submit" class="btn-primary">Pair Sensor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. ADD CAMERA MODAL -->
+  <div id="addCameraModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Add New Camera</h3>
+        <button type="button" class="close-modal-btn" aria-label="Close dialog">×</button>
+      </div>
+      <form id="addCameraForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Camera Name</label>
+            <input type="text" class="form-input" placeholder="e.g. Cam-03 South" required>
+          </div>
+          <div class="form-group">
+            <label>HTTP(S) video or MJPEG stream URL</label>
+            <input type="text" class="form-input" placeholder="https://camera.example/feed" required>
+          </div>
+          <div class="form-group">
+            <label for="add-camera-format">Feed format</label>
+            <select id="add-camera-format" class="form-input"><option value="video">Video stream</option><option value="mjpeg">MJPEG stream</option></select>
+          </div>
+          <div class="form-group"><label for="add-Camera-watts">Power draw (W)</label><input class="form-input" id="add-Camera-watts" type="number" min="0" step="any" placeholder="Enter wattage"></div>
+          <div class="form-group">
+            <label>Coverage Area</label>
+            <select class="form-input" required>
+              <option value="unassigned" selected>Unassigned</option>
+              <option value="pen12">Pens 1 & 2</option>
+              <option value="pen34">Pens 3 & 4</option>
+              <option value="hallway">Main Hallway</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-outline cancel-modal-btn">Cancel</button>
+          <button type="submit" class="btn-primary">Connect Camera</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. EDIT DEVICE MODAL -->
+  <div id="editDeviceModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Edit Device</h3>
+        <button type="button" class="close-modal-btn" aria-label="Close dialog">×</button>
+      </div>
+      <form id="editDeviceForm">
+        <div class="modal-body device-fields">
+          <div class="form-group"><label for="editDeviceName">Device name</label><input id="editDeviceName" class="form-input" required></div>
+          <div class="form-group" id="edit-sensor-fields" hidden><label for="edit-sensor-kind">Sensor type</label><select class="form-input" id="edit-sensor-kind"></select></div>
+          <div class="form-group"><label for="edit-watts">Power draw (W)</label><input class="form-input" id="edit-watts" type="number" min="0" step="any" placeholder="Enter wattage"></div>
+          <div class="form-group"><label for="edit-location">Assigned location</label><select id="edit-location" class="form-input"></select></div>
+          <div id="edit-camera-fields" class="device-fields" hidden>
+            <div class="form-group"><label for="edit-camera-url">HTTP(S) stream URL</label><input class="form-input" id="edit-camera-url" type="text"></div>
+            <div class="form-group"><label for="edit-camera-format">Feed format</label><select class="form-input" id="edit-camera-format"><option value="video">Video stream</option><option value="mjpeg">MJPEG stream</option></select></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-outline cancel-modal-btn">Cancel</button>
+          <button type="submit" class="btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. DELETE CONFIRMATION MODAL -->
+  <div id="deleteDeviceModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="text-crit">Remove Device</h3>
+        <button type="button" class="close-modal-btn" aria-label="Close dialog">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 12px; font-weight: 500;">Are you sure you want to delete <strong id="deleteDeviceName">this device</strong>?</p>
+        <p class="text-muted" style="font-size: 13px;">This removes the device and its pen assignments from this browser.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-outline cancel-modal-btn">Cancel</button>
+        <button type="button" class="btn-primary" id="confirmDeleteBtn" style="background: #EF4444; border-color: #EF4444;">Yes, Remove Device</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Alert Toast -->
+  <div id="customAlert" class="custom-alert">
+    <i id="alertIcon" class="fa-solid fa-circle-info"></i>
+    <span id="alertMessage" class="alert-text">Message goes here</span>
+  </div>
+
+  <script src="list-filter.js"></script>
+  <script src="device-inventory.js"></script>
+  <script src="gateway-modules.js"></script>
+  <script src="climate-controls.js"></script>
+  <script src="devicemanagement.js"></script>
+  <script src="sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #sidebar-container {
+    view-transition-name: navigation-panel;
+  }
+
+  ::view-transition-group(*) {
+    animation-duration: 180ms;
+    animation-timing-function: ease-out;
+  }
+
+  /* Keep matching navigation panels stationary while the content crossfades. */
+  ::view-transition-old(navigation-panel):not(:only-child) {
+    animation: none;
+    opacity: 0;
+  }
+
+  ::view-transition-new(navigation-panel):not(:only-child) {
+    animation: none;
+  }
+
+  /* Also soften direct file opens and browsers without cross-page transitions. */
+  .main-content,
+  :is(.auth-card.active-view, .login-card, .signup-card, .forgot-card,
+      .verify-card, .change-password-card) {
+    animation: scene-enter 180ms ease-out;
+  }
+
+  :root:active-view-transition :is(.main-content, .auth-card, .login-card,
+      .signup-card, .forgot-card, .verify-card, .change-password-card) {
+    animation-duration: 0s;
+  }
+
+  @keyframes scene-enter {
+    from { opacity: 0.86; translate: 0 3px; }
+    to { opacity: 1; translate: 0 0; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none;
+  }
+
+  ::view-transition-old(*) {
+    opacity: 0;
+  }
+}

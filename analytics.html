@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HogWatch - Analytics & Reports</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="analytics.css">
+  <link rel="stylesheet" href="hogwatch-ui.css">
+  <link rel="stylesheet" href="page-transitions.css">
+</head>
+<body data-page="analytics">
+
+  <div class="app-layout">
+    
+    <!-- Reusable Sidebar Injected Here -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Analytics Content -->
+    <main class="main-content">
+      
+      <!-- Page Header -->
+      <header class="page-header">
+        <div class="header-titles">
+          <h1>Analytics & Reports</h1>
+          <p class="header-meta">
+            <span class="live-pulse"></span> Monitored: 6 Pens · Window: <strong id="activeWindowText">Last 24 Hours</strong> · Synced 2 min ago
+          </p>
+        </div>
+        <div class="header-actions">
+          <button class="btn-secondary" id="exportBtn">
+            <i class="fa-solid fa-arrow-down-to-bracket"></i> Export Report
+          </button>
+          <button class="btn-primary" id="scheduleBtn">
+            <i class="fa-solid fa-calendar-check"></i> Schedule Report
+          </button>
+        </div>
+      </header>
+
+      <!-- Analytics Main Grid -->
+      <div class="analytics-workspace">
+        
+        <!-- Filter Controls Panel -->
+        <aside class="control-panel-card">
+          <div class="panel-header">
+            <h3><i class="fa-solid fa-sliders"></i> Filter Parameters</h3>
+            <button class="btn-text-reset" id="resetFiltersBtn">Reset</button>
+          </div>
+
+          <!-- Modern Unified Date Range -->
+          <div class="filter-section">
+            <label class="filter-label">Date Range</label>
+            <div class="modern-date-range">
+              <input type="date" class="clean-date" id="startDate" value="2026-11-08">
+              <span class="date-sep"><i class="fa-solid fa-arrow-right"></i></span>
+              <input type="date" class="clean-date" id="endDate" value="2026-11-09">
+            </div>
+          </div>
+
+          <div class="filter-section">
+            <label class="filter-label">Target Pens</label>
+            <div class="custom-select-wrapper">
+              <select class="custom-select" id="penSelect">
+                <option value="all">All Pens (Pen 1–6)</option>
+                <option value="1">Pen 1 (OK)</option>
+                <option value="2">Pen 2 (Warning)</option>
+                <option value="3">Pen 3 (OK)</option>
+                <option value="4">Pen 4 (Critical)</option>
+                <option value="5">Pen 5 (OK)</option>
+                <option value="6">Pen 6 (Offline)</option>
+              </select>
+              <i class="fa-solid fa-chevron-down select-icon"></i>
+            </div>
+          </div>
+
+          <div class="filter-section">
+            <label class="filter-label">Data Granularity</label>
+            <div class="custom-select-wrapper">
+              <select class="custom-select" id="granularitySelect">
+                <option value="1h">1 Hour Intervals</option>
+                <option value="6h">6 Hour Intervals</option>
+                <option value="12h">12 Hour Intervals</option>
+                <option value="1d">Daily Averages</option>
+              </select>
+              <i class="fa-solid fa-chevron-down select-icon"></i>
+            </div>
+          </div>
+
+          <div class="filter-section">
+            <label class="filter-label">Report Template</label>
+            <div class="custom-select-wrapper">
+              <select class="custom-select" id="templateSelect">
+                <option value="summary">Summary & Trend Charts</option>
+                <option value="raw">Raw Environmental Logs</option>
+                <option value="alerts">Alert Incident Audit</option>
+              </select>
+              <i class="fa-solid fa-chevron-down select-icon"></i>
+            </div>
+          </div>
+
+          <div class="panel-footer-note">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Data aggregated from ESP32 edge nodes. Threshold boundaries defined in system settings.</span>
+          </div>
+        </aside>
+
+        <!-- Right Side Analytics Canvas -->
+        <div class="analytics-canvas">
+          
+          <!-- Key Metrics Cards -->
+          <div class="metrics-summary-grid">
+            <div class="metric-card">
+              <div class="metric-card-top">
+                <span class="metric-title">Avg Temperature</span>
+                <span class="status-pill status-normal"><i class="fa-solid fa-circle"></i> Normal</span>
+              </div>
+              <div class="metric-main-value">
+                27.4 <span class="metric-unit">°C</span>
+              </div>
+              <div class="metric-card-bottom">
+                <span class="target-range">Target: 22.0 – 28.0 °C</span>
+                <span class="metric-trend text-green"><i class="fa-solid fa-arrow-trend-down"></i> -0.3 °C</span>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-card-top">
+                <span class="metric-title">Avg Humidity</span>
+                <span class="status-pill status-normal"><i class="fa-solid fa-circle"></i> Normal</span>
+              </div>
+              <div class="metric-main-value">
+                66 <span class="metric-unit">%</span>
+              </div>
+              <div class="metric-card-bottom">
+                <span class="target-range">Target: 50 – 70 %</span>
+                <span class="metric-trend text-muted"><i class="fa-solid fa-minus"></i> Steady</span>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-card-top">
+                <span class="metric-title">Avg Ammonia</span>
+                <span class="status-pill status-warning"><i class="fa-solid fa-triangle-exclamation"></i> Elevated</span>
+              </div>
+              <div class="metric-main-value text-warn">
+                14 <span class="metric-unit">ppm</span>
+              </div>
+              <div class="metric-card-bottom">
+                <span class="target-range">Safety Threshold: 25 ppm</span>
+                <span class="metric-trend text-warn"><i class="fa-solid fa-arrow-trend-up"></i> +2 ppm</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dual Sparkline Graphs Row -->
+          <div class="graphs-dual-row">
+            <!-- Temperature Chart Card -->
+            <div class="chart-container-card">
+              <div class="chart-card-header">
+                <div>
+                  <h3>Temperature Trend</h3>
+                  <p class="chart-subtitle">24-hour mean temp distribution</p>
+                </div>
+                <span class="chart-badge">Limit: 30 °C</span>
+              </div>
+
+              <div class="svg-chart-wrapper">
+                <svg viewBox="0 0 500 130" class="smooth-svg" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="tempGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#10B981" stop-opacity="0.3"/>
+                      <stop offset="100%" stop-color="#10B981" stop-opacity="0.0"/>
+                    </linearGradient>
+                  </defs>
+                  
+                  <rect x="0" y="0" width="500" height="25" fill="#FEF2F2" opacity="0.6"/>
+                  <line x1="0" y1="25" x2="500" y2="25" stroke="#EF4444" stroke-dasharray="4,4" stroke-width="1.5" />
+                  
+                  <path d="M 0 65 Q 60 40 120 55 T 240 50 T 360 80 L 500 75 L 500 130 L 0 130 Z" fill="url(#tempGradient)" />
+                  <path d="M 0 65 Q 60 40 120 55 T 240 50 T 360 80 L 500 75" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" />
+                  
+                  <circle cx="500" cy="75" r="4.5" fill="#10B981" stroke="#FFFFFF" stroke-width="2" />
+                </svg>
+                <div class="chart-x-axis">
+                  <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>Now</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Humidity Chart Card -->
+            <div class="chart-container-card">
+              <div class="chart-card-header">
+                <div>
+                  <h3>Humidity Trend</h3>
+                  <p class="chart-subtitle">Relative humidity percentage</p>
+                </div>
+                <span class="chart-badge">Limit: 70 %</span>
+              </div>
+
+              <div class="svg-chart-wrapper">
+                <svg viewBox="0 0 500 130" class="smooth-svg" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="humidityGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.3"/>
+                      <stop offset="100%" stop-color="#3B82F6" stop-opacity="0.0"/>
+                    </linearGradient>
+                  </defs>
+                  
+                  <rect x="0" y="0" width="500" height="25" fill="#FFFBEB" opacity="0.6"/>
+                  <line x1="0" y1="25" x2="500" y2="25" stroke="#F59E0B" stroke-dasharray="4,4" stroke-width="1.5" />
+                  
+                  <path d="M 0 50 Q 70 35 140 55 T 280 60 T 420 85 L 500 80 L 500 130 L 0 130 Z" fill="url(#humidityGradient)" />
+                  <path d="M 0 50 Q 70 35 140 55 T 280 60 T 420 85 L 500 80" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" />
+                  
+                  <circle cx="500" cy="80" r="4.5" fill="#3B82F6" stroke="#FFFFFF" stroke-width="2" />
+                </svg>
+                <div class="chart-x-axis">
+                  <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>Now</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Full Width Ammonia Chart Card -->
+          <div class="chart-container-card full-width">
+            <div class="chart-card-header">
+              <div>
+                <h3>Ammonia Concentration Trend (NH3)</h3>
+                <p class="chart-subtitle">Gas levels monitored across all active sensor pods</p>
+              </div>
+              <div class="chart-legend-pills">
+                <span class="legend-pill"><span class="dot dot-green"></span> Optimal (&lt; 20 ppm)</span>
+                <span class="legend-pill"><span class="dot dot-red"></span> Critical (&ge; 25 ppm)</span>
+              </div>
+            </div>
+
+            <div class="svg-chart-wrapper large-chart">
+              <svg viewBox="0 0 1000 150" class="smooth-svg" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="ammoniaGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.25"/>
+                    <stop offset="100%" stop-color="#F59E0B" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+                
+                <line x1="0" y1="35" x2="1000" y2="35" stroke="#EF4444" stroke-dasharray="5,5" stroke-width="1.5" />
+                <text x="990" y="26" fill="#EF4444" font-size="11" font-weight="700" text-anchor="end">25 ppm Threshold</text>
+                
+                <path d="M 0 80 Q 100 65 200 75 T 400 60 T 600 100 T 800 85 L 1000 45 L 1000 150 L 0 150 Z" fill="url(#ammoniaGradient)" />
+                <path d="M 0 80 Q 100 65 200 75 T 400 60 T 600 100 T 800 85 L 1000 45" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" />
+                
+                <circle cx="1000" cy="45" r="5" fill="#EF4444" stroke="#FFFFFF" stroke-width="2.5" />
+              </svg>
+              
+              <div class="chart-x-axis">
+                <span>00:00</span><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>Now (27 ppm - Pen 4)</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom Layout Section -->
+      <div class="analytics-bottom-layout">
+        <!-- Per-Pen Comparison Panel -->
+        <div class="card-section pen-comparison-card">
+          <div class="section-title-bar">
+            <div>
+              <h3>Per-Pen Environmental Telemetry</h3>
+              <p class="section-subtext">Real-time comparison across active piggery pens</p>
+            </div>
+            <a href="pen-monitoring.html" class="link-action">Open Pen Monitor <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+
+          <div class="pen-table-wrapper">
+            <table class="pen-data-table">
+              <thead>
+                <tr>
+                  <th>Pen ID</th>
+                  <th>Health Status</th>
+                  <th>Temperature</th>
+                  <th>Humidity</th>
+                  <th>Ammonia</th>
+                  <th>Sensor Health</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong class="pen-name-tag">Pen 1</strong></td>
+                  <td><span class="badge badge-ok"><i class="fa-regular fa-circle-check"></i> OK</span></td>
+                  <td><span class="val-bold">26.8 °C</span></td>
+                  <td><span class="val-bold">62 %</span></td>
+                  <td><span class="val-bold">12 ppm</span></td>
+                  <td><span class="status-indicator-dot online"></span> 100% Signal</td>
+                </tr>
+                <tr>
+                  <td><strong class="pen-name-tag">Pen 2</strong></td>
+                  <td><span class="badge badge-warn"><i class="fa-solid fa-triangle-exclamation"></i> Warning</span></td>
+                  <td><span class="val-bold text-warn">29.1 °C</span></td>
+                  <td><span class="val-bold">70 %</span></td>
+                  <td><span class="val-bold">17 ppm</span></td>
+                  <td><span class="status-indicator-dot online"></span> 98% Signal</td>
+                </tr>
+                <tr>
+                  <td><strong class="pen-name-tag">Pen 3</strong></td>
+                  <td><span class="badge badge-ok"><i class="fa-regular fa-circle-check"></i> OK</span></td>
+                  <td><span class="val-bold">27.0 °C</span></td>
+                  <td><span class="val-bold">60 %</span></td>
+                  <td><span class="val-bold">11 ppm</span></td>
+                  <td><span class="status-indicator-dot online"></span> 100% Signal</td>
+                </tr>
+                <tr>
+                  <td><strong class="pen-name-tag">Pen 4</strong></td>
+                  <td><span class="badge badge-crit"><i class="fa-solid fa-circle-exclamation"></i> Critical</span></td>
+                  <td><span class="val-bold">28.4 °C</span></td>
+                  <td><span class="val-bold">74 %</span></td>
+                  <td><span class="val-bold text-crit">27 ppm</span></td>
+                  <td><span class="status-indicator-dot low-battery"></span> Low Battery (14%)</td>
+                </tr>
+                <tr>
+                  <td><strong class="pen-name-tag">Pen 5</strong></td>
+                  <td><span class="badge badge-ok"><i class="fa-regular fa-circle-check"></i> OK</span></td>
+                  <td><span class="val-bold">26.2 °C</span></td>
+                  <td><span class="val-bold">58 %</span></td>
+                  <td><span class="val-bold">10 ppm</span></td>
+                  <td><span class="status-indicator-dot online"></span> 100% Signal</td>
+                </tr>
+                <tr class="row-disabled">
+                  <td><strong class="pen-name-tag text-muted">Pen 6</strong></td>
+                  <td><span class="badge badge-offline"><i class="fa-solid fa-minus"></i> Offline</span></td>
+                  <td><span class="text-muted">-</span></td>
+                  <td><span class="text-muted">-</span></td>
+                  <td><span class="text-muted">-</span></td>
+                  <td><span class="status-indicator-dot offline"></span> Disconnected</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Alert Distribution Panel -->
+        <div class="card-section alert-distribution-card">
+          <div class="section-title-bar">
+            <h3>Alert Distribution</h3>
+          </div>
+
+          <div class="distribution-stack">
+            <div class="dist-card dist-critical">
+              <div class="dist-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
+              <div class="dist-details">
+                <div class="dist-header">
+                  <span>Critical Alerts</span>
+                  <strong>1 Active</strong>
+                </div>
+                <p>Pen 4 ammonia elevated above 25 ppm threshold.</p>
+              </div>
+            </div>
+
+            <div class="dist-card dist-warning">
+              <div class="dist-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+              <div class="dist-details">
+                <div class="dist-header">
+                  <span>Warning Alerts</span>
+                  <strong>2 Active</strong>
+                </div>
+                <p>Pen 2 temperature rising · Sensor S-09 low battery.</p>
+              </div>
+            </div>
+
+            <div class="dist-card dist-offline">
+              <div class="dist-icon"><i class="fa-solid fa-plug-circle-xmark"></i></div>
+              <div class="dist-details">
+                <div class="dist-header">
+                  <span>Offline Devices</span>
+                  <strong>1 Gateway Node</strong>
+                </div>
+                <p>Pen 6 node S-11 uncommunicative for &gt; 2 hours.</p>
+              </div> 
+            </div>
+
+            <div class="dist-card dist-resolved">
+              <div class="dist-icon"><i class="fa-solid fa-circle-check"></i></div>
+              <div class="dist-details">
+                <div class="dist-header">
+                  <span>Resolved Today</span>
+                  <strong>12 Incidents</strong>
+                </div>
+                <p>All automated cooling &amp; ventilation triggers completed.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="sidebar.js"></script>
+  <script src="analytics.js"></script>
+</body>
+</html>
